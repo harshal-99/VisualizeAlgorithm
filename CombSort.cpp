@@ -1,14 +1,12 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <string>
 #include <cstdio>
 #include <random>
-#include <limits>
 #include <algorithm>
 #include <vector>
 
 const int SCREEN_WIDTH = 720;
-const int SCREEN_HEIGHT = 640;
+const int SCREEN_HEIGHT = 360;
 
 bool init();
 void close();
@@ -70,41 +68,40 @@ void close()
 void fillRandomElements(std::vector<int>& v) {
     std::random_device randGen;
     std::mt19937_64 mt(randGen());
-    std::uniform_int_distribution<> distribution(1, SCREEN_HEIGHT);
-    for (int i = 0; i < SCREEN_WIDTH / 2; i++)
+    for (int i = 1; i <= SCREEN_WIDTH / 2; i++) {
+        v.at(i-1) = i;
+    }
+    std::shuffle(v.begin(),v.end(),mt);
+}
+
+void fillRectangle(SDL_Renderer *Renderer,SDL_Rect * rectangle,std::vector<int>& v) {
+    for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
     {
-        v.at(i) = distribution(mt);
+        rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+        SDL_RenderFillRect(Renderer, &rectangle[i]);
     }
 }
 
-void fillRectangle(SDL_Renderer *gRenderer,SDL_Rect * rectangle,std::vector<int>& v) {
-    for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-        {
-            rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
-            SDL_RenderFillRect(gRenderer, &rectangle[i]);
-        }
-}
+void fillRectangle(SDL_Renderer *Renderer,SDL_Rect * rectangle,std::vector<int>& v,int& least,int& other) {
 
-void fillRectangle(SDL_Renderer *gRenderer,SDL_Rect * rectangle,std::vector<int>& v,int& least,int& other) {
-    
     for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-        {
+    {
         if(i == least || i == other) {
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+            SDL_SetRenderDrawColor(Renderer, 0xFF, 0x00, 0x00, 0xFF);
         }else{
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
+            SDL_SetRenderDrawColor(Renderer, 0x00, 0xFF, 0x00, 0xFF);
         }
-            rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
-            SDL_RenderFillRect(gRenderer, &rectangle[i]);
-        }
+        rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+        SDL_RenderFillRect(gRenderer, &rectangle[i]);
+    }
 }
 
 
-void fillRectangle(SDL_Renderer *gRenderer,SDL_Rect *rectangle,std::vector<int>& v,int delay) {
+void fillRectangle(SDL_Renderer *Renderer,SDL_Rect *rectangle,std::vector<int>& v,int delay) {
     for (size_t a = 0, b = 0; a < SCREEN_WIDTH / 2; a++, b += 2)    {
-        rectangle[a] = {b, SCREEN_HEIGHT - v.at(a), 2, v.at(a)};
-        SDL_RenderFillRect(gRenderer, &rectangle[a]);
-        SDL_RenderPresent(gRenderer);
+        rectangle[a] = {static_cast<int>(b), SCREEN_HEIGHT - v.at(a), 2, v.at(a)};
+        SDL_RenderFillRect(Renderer, &rectangle[a]);
+        SDL_RenderPresent(Renderer);
         SDL_Delay(delay);
     }
 }
@@ -140,6 +137,7 @@ int main(int argc, char const *argv[])
                 if (e.type == SDL_QUIT) quit = true;
             }
             if(!std::is_sorted(v.begin(),v.end())) {
+                // getchar();
                 int step = v.size(),i,j,k;
                 while((step = int(step/1.3)) > 1) {
                     for(j = v.size() - 1; j >= step; j--) {
@@ -169,16 +167,16 @@ int main(int argc, char const *argv[])
                         }
                     }
                 }
-            // SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-            // SDL_RenderClear(gRenderer);
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-            fillRectangle(gRenderer,rectangle,v,1);
-            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-            fillRectangle(gRenderer,rectangle,v);
-            SDL_RenderPresent(gRenderer);
-            SDL_Delay(200);
+                // SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                // SDL_RenderClear(gRenderer);
+                SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
+                fillRectangle(gRenderer,rectangle,v,1);
+                SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
+                fillRectangle(gRenderer,rectangle,v);
+                SDL_RenderPresent(gRenderer);
+                SDL_Delay(200);
             }
-            
+
         }
     }
     close();
