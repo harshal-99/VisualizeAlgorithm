@@ -3,12 +3,11 @@
 #include <string>
 #include <cstdio>
 #include <random>
-#include <limits>
 #include <algorithm>
 #include <vector>
 
 const int SCREEN_WIDTH = 720;
-const int SCREEN_HEIGHT = 640;
+const int SCREEN_HEIGHT = 360;
 
 bool init();
 void close();
@@ -66,19 +65,20 @@ void close()
     SDL_DestroyWindow(gWindow);
     SDL_Quit();
 }
+void fillRandomElements(std::vector<int>& v) {
+    std::random_device randGen;
+    std::mt19937_64 mt(randGen());
+    for (int i = 1; i <= SCREEN_WIDTH / 2; i++)
+    {
+        v.at(i-1) = i;
+    }
+    std::shuffle(v.begin(),v.end(),mt);
+}
 
 int main(int argc, char const *argv[])
 {
     std::vector<int> v(SCREEN_WIDTH / 2);
-    std::random_device randGen;
-    std::mt19937_64 mt(randGen());
-    std::uniform_int_distribution<> distribution(1, SCREEN_HEIGHT);
-    // std::cout << "Min: " << randGen.min() << "\nMax: " << randGen.max() << "\n";
-    for (int i = 0; i < SCREEN_WIDTH / 2; i++)
-    {
-        v.at(i) = distribution(mt);
-        // std::cout << v.at(i) << " ";
-    }
+    fillRandomElements(v);
 
     if (!init())
     {
@@ -115,6 +115,7 @@ int main(int argc, char const *argv[])
 
             if (!sorted)
             {
+                getchar();
                 for (row = 0; row < v.size(); ++row)
                 {
                     swapped = false;
@@ -145,7 +146,7 @@ int main(int argc, char const *argv[])
                                 {
                                     SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
                                 }
-                                rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                                rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
                                 SDL_RenderFillRect(gRenderer, &rectangle[i]);
                             }
                             SDL_RenderPresent(gRenderer);
@@ -158,7 +159,7 @@ int main(int argc, char const *argv[])
                 for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
                 {
                     SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-                    rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                    rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
                     SDL_RenderFillRect(gRenderer, &rectangle[i]);
                     SDL_Delay(1);
                     SDL_RenderPresent(gRenderer);
@@ -166,7 +167,7 @@ int main(int argc, char const *argv[])
                 for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
                 {
                     SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-                    rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                    rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
                     SDL_RenderFillRect(gRenderer, &rectangle[i]);
                     SDL_Delay(1);
                     SDL_RenderPresent(gRenderer);
