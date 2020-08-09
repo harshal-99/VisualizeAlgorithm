@@ -137,7 +137,7 @@ int main(int argc, char const *argv[])
             // getchar();
             if(!std::is_sorted(v.begin(),v.end())) {
                 // getchar();
-                register int i,j,hCnt,h;
+                int i,j,hCnt,h;
                 int increment[20],k;
                 for(h = 1,i = 0; h < v.size();i++) {
                     increment[i] = h;
