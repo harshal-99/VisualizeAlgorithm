@@ -198,13 +198,23 @@ int main(int argc, char const *argv[])
                 quicksort(v,v.size());
             }
             quit = true;
-            // SDL_RenderClear(gRenderer);
-            // SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-            // fillRectangle(gRenderer,rectangle,v,1);
-            // SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-            // fillRectangle(gRenderer,rectangle,v);
-            // SDL_RenderPresent(gRenderer);
-            // SDL_Delay(200);
+            for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
+            {
+                SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
+                rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                SDL_RenderFillRect(gRenderer, &rectangle[i]);
+                SDL_Delay(1);
+                SDL_RenderPresent(gRenderer);
+            }
+            for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
+            {
+                SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
+                rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                SDL_RenderFillRect(gRenderer, &rectangle[i]);
+                SDL_Delay(1);
+                SDL_RenderPresent(gRenderer);
+            }
+             SDL_Delay(200);
         }
     }
     close();
