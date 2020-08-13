@@ -67,10 +67,7 @@ void close()
 void fillRandomElements(std::vector<int>& v) {
     std::random_device randGen;
     std::mt19937_64 mt(randGen());
-    for (int i = 1; i <= SCREEN_WIDTH / 2; i++)
-    {
-        v.at(i-1) = i;
-    }
+    std::iota(v.begin(),v.end(),1);
     std::shuffle(v.begin(),v.end(),mt);
 }
 
@@ -182,7 +179,7 @@ int main(int argc, char const *argv[])
                     SDL_RenderPresent(gRenderer);
                 }
                 // SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-                // SDL_RenderClear(gRenderer);
+//                 SDL_RenderClear(gRenderer);
                 // SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
                 // fillRectangle(gRenderer,rectangle,v,1);
                 // SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
@@ -190,7 +187,6 @@ int main(int argc, char const *argv[])
                 // SDL_RenderPresent(gRenderer);
                 // SDL_Delay(200);
             }
-
         }
     }
     close();
