@@ -1,9 +1,10 @@
-#include <iostream>
 #include <SDL2/SDL.h>
-#include <string>
-#include <cstdio>
-#include <random>
+
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
+#include <random>
+#include <string>
 #include <vector>
 
 const int SCREEN_WIDTH = 720;
@@ -12,46 +13,37 @@ const int SCREEN_HEIGHT = 360;
 bool init();
 void close();
 
-SDL_Texture *loadTexture(std::string path);
+SDL_Texture* loadTexture(std::string path);
 
-SDL_Window *gWindow = NULL;
-SDL_Renderer *gRenderer;
+SDL_Window* gWindow = NULL;
+SDL_Renderer* gRenderer;
 
-bool init()
-{
+bool init() {
     bool success = true;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
         success = false;
-    }
-    else
-    {
-        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-        {
+    } else {
+        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
             printf("Warning: Linear texture filtering not enabled!");
         }
-        gWindow = SDL_CreateWindow("Bubble Sort",
-                                   SDL_WINDOWPOS_CENTERED,
-                                   SDL_WINDOWPOS_CENTERED,
-                                   SCREEN_WIDTH,
-                                   SCREEN_HEIGHT,
-                                   SDL_WINDOW_SHOWN);
-        if (gWindow == NULL)
-        {
-            printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+        gWindow = SDL_CreateWindow("Bubble Sort", SDL_WINDOWPOS_CENTERED,
+                                   SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+                                   SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        if (gWindow == NULL) {
+            printf("Window could not be created! SDL Error: %s\n",
+                   SDL_GetError());
             success = false;
-        }
-        else
-        {
-            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-            if (gRenderer == NULL)
-            {
-                printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+        } else {
+            gRenderer =
+                SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+            if (gRenderer == NULL) {
+                printf(
+                    "Renderer could not be created! SDL "
+                    "Error: %s\n",
+                    SDL_GetError());
                 success = false;
-            }
-            else
-            {
+            } else {
                 SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             }
         }
@@ -59,8 +51,7 @@ bool init()
     return success;
 }
 
-void close()
-{
+void close() {
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     SDL_Quit();
@@ -68,24 +59,19 @@ void close()
 void fillRandomElements(std::vector<int>& v) {
     std::random_device randGen;
     std::mt19937_64 mt(randGen());
-    for (int i = 1; i <= SCREEN_WIDTH / 2; i++)
-    {
-        v.at(i-1) = i;
+    for (int i = 1; i <= SCREEN_WIDTH / 2; i++) {
+        v.at(i - 1) = i;
     }
-    std::shuffle(v.begin(),v.end(),mt);
+    std::shuffle(v.begin(), v.end(), mt);
 }
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const* argv[]) {
     std::vector<int> v(SCREEN_WIDTH / 2);
     fillRandomElements(v);
 
-    if (!init())
-    {
+    if (!init()) {
         printf("Failed to initialize!\n");
-    }
-    else
-    {
+    } else {
         bool quit = false;
         SDL_Event e;
         bool sorted = false;
@@ -95,17 +81,14 @@ int main(int argc, char const *argv[])
 
         SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
         SDL_Rect rectangle[SCREEN_WIDTH / 2];
-        for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-        {
+        for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2) {
             rectangle[i] = {j, SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
             SDL_RenderFillRect(gRenderer, &rectangle[i]);
         }
         SDL_RenderPresent(gRenderer);
         SDL_UpdateWindowSurface(gWindow);
-        while (!quit)
-        {
-            while (SDL_PollEvent(&e) != 0)
-            {
+        while (!quit) {
+            while (SDL_PollEvent(&e) != 0) {
                 if (e.type == SDL_QUIT)
                     quit = true;
             }
@@ -113,40 +96,37 @@ int main(int argc, char const *argv[])
             size_t row, col;
             bool swapped;
 
-            if (!sorted)
-            {
+            if (!sorted) {
                 getchar();
-                for (row = 0; row < v.size(); ++row)
-                {
+                for (row = 0; row < v.size(); ++row) {
                     swapped = false;
-                    if (e.type == SDL_QUIT)
-                    {
+                    if (e.type == SDL_QUIT) {
                         break;
                     }
-                    for (col = 0; col < v.size() - row - 1; ++col)
-                    {
-                        if (e.type == SDL_QUIT)
-                        {
+                    for (col = 0; col < v.size() - row - 1; ++col) {
+                        if (e.type == SDL_QUIT) {
                             break;
                         }
-                        if (v.at(col) > v.at(col + 1))
-                        {
+                        if (v.at(col) > v.at(col + 1)) {
                             std::swap(v.at(col), v.at(col + 1));
                             swapped = true;
-                            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+                            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF,
+                                                   0xFF);
                             SDL_RenderClear(gRenderer);
-                            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-                            for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-                            {
-                                if (i == col || i == col + 1)
-                                {
-                                    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+                            SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00,
+                                                   0xFF);
+                            for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2;
+                                 ++i, j += 2) {
+                                if (i == col || i == col + 1) {
+                                    SDL_SetRenderDrawColor(gRenderer, 0xFF,
+                                                           0x00, 0x00, 0xFF);
+                                } else {
+                                    SDL_SetRenderDrawColor(gRenderer, 0x00,
+                                                           0xFF, 0x00, 0xFF);
                                 }
-                                else
-                                {
-                                    SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-                                }
-                                rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                                rectangle[i] = {static_cast<int>(j),
+                                                SCREEN_HEIGHT - v.at(i), 2,
+                                                v.at(i)};
                                 SDL_RenderFillRect(gRenderer, &rectangle[i]);
                             }
                             SDL_RenderPresent(gRenderer);
@@ -156,25 +136,24 @@ int main(int argc, char const *argv[])
                         break;
                 }
                 // std::cout << "Out of Sorting Loop\n";
-                for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-                {
+                for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2) {
                     SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-                    rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                    rectangle[i] = {static_cast<int>(j),
+                                    SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
                     SDL_RenderFillRect(gRenderer, &rectangle[i]);
                     SDL_Delay(1);
                     SDL_RenderPresent(gRenderer);
                 }
-                for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2)
-                {
+                for (size_t i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2) {
                     SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-                    rectangle[i] = {static_cast<int>(j), SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
+                    rectangle[i] = {static_cast<int>(j),
+                                    SCREEN_HEIGHT - v.at(i), 2, v.at(i)};
                     SDL_RenderFillRect(gRenderer, &rectangle[i]);
                     SDL_Delay(1);
                     SDL_RenderPresent(gRenderer);
                 }
                 sorted = true;
             }
-
         }
     }
     close();
