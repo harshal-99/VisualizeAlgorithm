@@ -192,15 +192,8 @@ int main(int argc, char const *argv[])
                     SDL_Delay(1);
                     SDL_RenderPresent(gRenderer);
                 }
-                // SDL_RenderClear(gRenderer);
-                // SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0xFF, 0xFF);
-                // fillRectangle(gRenderer,rectangle,v,1);
-                // SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
-                // fillRectangle(gRenderer,rectangle,v);
-                // SDL_RenderPresent(gRenderer);
                 SDL_Delay(200);
             }
-
         }
     }
     close();
