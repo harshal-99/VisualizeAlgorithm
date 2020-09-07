@@ -17,4 +17,4 @@
 CXX = clang++
 CXXFLAGS = -Wall
 LDLIBS = -lSDL2
-clean:
+
