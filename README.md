@@ -4,24 +4,24 @@ Dependency: SDL2 https://wiki.libsdl.org
 
 # Shell Sort 
 
-![](ShellSort2.gif)
+![](gif/ShellSort2.gif)
 
 # Comb Sort
 
-![](CombSort.gif)
+![](gif/CombSort.gif)
 
 # Insertion Sort
 
-![](InsertionSort.gif)
+![](gif/InsertionSort.gif)
 
 # Selection Sort
 
-![](SelectionSort.gif)
+![](gif/SelectionSort.gif)
 
 # Bubble Sort
 
 
-![](BubbleSortgif.gif)
+![](gif/BubbleSortgif.gif)
 
 Inspired by YouTube Channel The Coding Train https://www.youtube.com/user/shiffman
 
