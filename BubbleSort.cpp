@@ -1,71 +1,10 @@
 #include <SDL2/SDL.h>
+#include "commonHeader.hpp"
 
-#include <algorithm>
-#include <cstdio>
-#include <iostream>
-#include <random>
-#include <string>
+
 #include <vector>
 
-const int SCREEN_WIDTH = 720;
-const int SCREEN_HEIGHT = 360;
-
-bool init();
-void close();
-
-SDL_Texture* loadTexture(std::string path);
-
-SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer;
-
-bool init() {
-    bool success = true;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-        success = false;
-    } else {
-        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
-            printf("Warning: Linear texture filtering not enabled!");
-        }
-        gWindow = SDL_CreateWindow("Bubble Sort", SDL_WINDOWPOS_CENTERED,
-                                   SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
-                                   SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        if (gWindow == NULL) {
-            printf("Window could not be created! SDL Error: %s\n",
-                   SDL_GetError());
-            success = false;
-        } else {
-            gRenderer =
-                SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-            if (gRenderer == NULL) {
-                printf(
-                    "Renderer could not be created! SDL "
-                    "Error: %s\n",
-                    SDL_GetError());
-                success = false;
-            } else {
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-            }
-        }
-    }
-    return success;
-}
-
-void close() {
-    SDL_DestroyRenderer(gRenderer);
-    SDL_DestroyWindow(gWindow);
-    SDL_Quit();
-}
-void fillRandomElements(std::vector<int>& v) {
-    std::random_device randGen;
-    std::mt19937_64 mt(randGen());
-    for (int i = 1; i <= SCREEN_WIDTH / 2; i++) {
-        v.at(i - 1) = i;
-    }
-    std::shuffle(v.begin(), v.end(), mt);
-}
-
-int main(int argc, char const* argv[]) {
+int main() {
     std::vector<int> v(SCREEN_WIDTH / 2);
     fillRandomElements(v);
 
@@ -97,7 +36,6 @@ int main(int argc, char const* argv[]) {
             bool swapped;
 
             if (!sorted) {
-                getchar();
                 for (row = 0; row < v.size(); ++row) {
                     swapped = false;
                     if (e.type == SDL_QUIT) {
