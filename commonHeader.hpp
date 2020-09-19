@@ -99,4 +99,54 @@ void fillRectangle(SDL_Renderer *Renderer,SDL_Rect * Rectangle,std::vector<int>&
     }
 }
 
+void fillRectangle(SDL_Renderer* renderer,
+                   SDL_Rect* rectangle,
+                   std::vector<long>& v,
+                   long least) {
+    for (long i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2) {
+        if (i == least) {
+            SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+        } else {
+            SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+        }
+        rectangle[i] = {static_cast<int>(j),
+                        static_cast<int>(SCREEN_HEIGHT - v.at(i)), 2,
+                        static_cast<int>(v.at(i))};
+        SDL_RenderFillRect(renderer, &rectangle[i]);
+    }
+}
+
+void fillRectangle(SDL_Renderer* renderer,
+                   SDL_Rect* rectangle,
+                   std::vector<long>& v) {
+    for (int i = 0, j = 0; i < SCREEN_WIDTH / 2; ++i, j += 2) {
+        rectangle[i] = {j, static_cast<int>(SCREEN_HEIGHT - v.at(i)), 2,
+                        static_cast<int>(v.at(i))};
+        SDL_RenderFillRect(renderer, &rectangle[i]);
+    }
+}
+
+void fillRandomElements(std::vector<long>& v) {
+    std::random_device randGen;
+    std::mt19937_64 mt(randGen());
+    for (int i = 0; i < SCREEN_WIDTH / 2; i++) {
+        v.at(i) = i;
+    }
+    std::shuffle(v.begin(), v.end(), mt);
+}
+
+void fillRectangle(SDL_Renderer* renderer,
+                   SDL_Rect* rectangle,
+                   std::vector<long>& v,
+                   int delay) {
+    for (size_t a = 0, b = 0; a < SCREEN_WIDTH / 2; a++, b += 2) {
+        rectangle[a] = {static_cast<int>(b),
+                        static_cast<int>(SCREEN_HEIGHT - v.at(a)), 2,
+                        static_cast<int>(v.at(a))};
+        SDL_RenderFillRect(renderer, &rectangle[a]);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(delay);
+    }
+}
+
 #endif  // VISUALIZEALGORITHM_COMMONHEADER_HPP
