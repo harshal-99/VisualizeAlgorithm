@@ -2,23 +2,23 @@
 
 Dependency: SDL2 https://wiki.libsdl.org
 
-#Shell Sort 
+# Shell Sort 
 
 ![](ShellSort2.gif)
 
-#Comb Sort
+# Comb Sort
 
 ![](CombSort.gif)
 
-#Insertion Sort
+# Insertion Sort
 
 ![](InsertionSort.gif)
 
-#Selection Sort
+# Selection Sort
 
 ![](SelectionSort.gif)
 
-#Bubble Sort
+# Bubble Sort
 
 
 ![](BubbleSortgif.gif)
