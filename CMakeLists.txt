@@ -25,4 +25,8 @@ include(CMake/Sanatizers.cmake)
 
 option(BUILD_SHARED_LIBS "Enable compilation of shared libraires" OFF)
 
+add_executable(main src/main src/renderAlgo.cpp include/renderAlgo.hpp)
+
+target_link_libraries(main ${SFML_LIBRIES} -lGL -lsfml-window -lsfml-graphics -lsfml-system -lsfml-audio)
+
 
